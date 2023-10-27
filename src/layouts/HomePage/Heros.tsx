@@ -49,7 +49,7 @@ export const Heros = () => {
       <div className="d-lg-none">
         <div className="container">
           <div className="m-2">
-            <div className="col-img-left">
+            <div className="col-image-left"></div>
               <div className="mt-2">
                 <h1>What have you been reading?</h1>
                 <p className="lead">
@@ -58,14 +58,13 @@ export const Heros = () => {
                   we will be able to provide top content for you!
                 </p>
                 <a className="btn main-color btn-lg text-white" href="#">
-                  Sign Up{" "}
+                  Sign Up
                 </a>
               </div>
-            </div>
             <div className="m-2">
-                <div className="col-img-right"></div>
+                <div className="col-image-right"></div>
                 <div className="mt-2">
-                <h1>Our collection is always changing!</h1>
+                    <h1>Our collection is always changing!</h1>
                     <p className="lead">
                     Try to check in daily as our collection is always changing! We
                     work nonstop to provide the most accurate book selection for our

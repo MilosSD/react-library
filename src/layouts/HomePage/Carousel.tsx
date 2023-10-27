@@ -36,6 +36,7 @@ export const Carousel = () => {
               <ReturnBook/>
             </div>
           </div>
+        </div>
           <button
             className="carousel-control-prev"
             type="button"
@@ -64,7 +65,7 @@ export const Carousel = () => {
 
         {/* Mobile */}
         <div className="d-lg-none mt-3">
-          <div className="row d-flex justify-content-center align-item-center">
+          <div className="row d-flex justify-content-center align-items-center">
             <ReturnBook/>
           </div>
         </div>
@@ -74,6 +75,6 @@ export const Carousel = () => {
           </a>
         </div>
       </div>
-    </div>
+    
   );
 };
