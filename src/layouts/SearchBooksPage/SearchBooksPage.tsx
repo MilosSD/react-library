@@ -37,7 +37,7 @@ export const SearchBooksPage = () => {
 
       const responseJson = await response.json();
 
-      const responseData = responseJson._embeded.books;
+      const responseData = responseJson._embedded.books;
 
       setTotalAmountOfBooks(responseJson.page.totalElements);
       setTotalPages(responseJson.page.totalPages);
