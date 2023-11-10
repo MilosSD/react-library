@@ -1,7 +1,7 @@
 class ReviewModel {
   id: number;
   userEmail: String;
-  date: String;
+  date: string;
   rating: number;
   book_id: number;
   reviewDescription?: string;

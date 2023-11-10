@@ -4,6 +4,7 @@ import { SpinnerLoading } from "../Utils/SpinnerLoading";
 import { StarReview } from "../Utils/StarReview";
 import { CheckoutAndReviewBox } from "./CheckoutAndReviewBox";
 import ReviewModel from "../../models/ReviewModel";
+import { LatestReviews } from "./LatestReviews";
 
 
 export const BookCheckoutPage = () => {
@@ -56,7 +57,7 @@ export const BookCheckoutPage = () => {
       const responseReviews = await fetch(reviewUrl);
 
       if(!responseReviews.ok){
-        throw new Error('something went wrong!')
+        throw new Error('Something went wrong!')
       }
 
       const responseJsonReviews = await responseReviews.json();
@@ -125,12 +126,13 @@ export const BookCheckoutPage = () => {
               <h2>{book?.title}</h2>
               <h5 className="text-primary">{book?.author}</h5>
               <p className="lead">{book?.description}</p>
-              <StarReview rating={4.5} size={32}/>
+              <StarReview rating={totalStars} size={32}/>
             </div>
           </div>
           <CheckoutAndReviewBox book={book} mobile={false}/>
         </div>
         <hr />
+        <LatestReviews reviews={reviews} bookId={book?.id} mobile={false}/>
       </div>
       <div className="container d-lg-none mt-5">
         <div className="d-flex justify-content-center align-item-center">
@@ -146,11 +148,12 @@ export const BookCheckoutPage = () => {
             <h2>{book?.title}</h2>
             <h5 className="text-primary">{book?.author}</h5>
             <p className="lead">{book?.description}</p>
-            <StarReview rating={4.5} size={32}/>
+            <StarReview rating={totalStars} size={32}/>
           </div>
         </div>
         <CheckoutAndReviewBox book={book} mobile={true}/>
         <hr />
+        <LatestReviews reviews={reviews} bookId={book?.id} mobile={true}/>
       </div>
     </div>
   );
