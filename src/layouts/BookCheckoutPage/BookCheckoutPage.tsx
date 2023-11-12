@@ -16,7 +16,7 @@ export const BookCheckoutPage = () => {
   const [totalStars, setTotalStars] = useState(0);
   const [isLoadingReview, setIsLoadingReview] = useState(true);
 
-  const bookId = window.location.pathname.split("/")[2];
+  const bookId = (window.location.pathname).split('/')[2];
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -52,7 +52,8 @@ export const BookCheckoutPage = () => {
 
   useEffect(()=> {
     const fetchBookReviews = async () => {
-      const reviewUrl: string = `htttp://localhost:8080/api/reviews/search/findByBookId?bookId=${bookId}`;
+
+      const reviewUrl: string = `http://localhost:8080/api/reviews/search/findByBookId?bookId=${bookId}`;
 
       const responseReviews = await fetch(reviewUrl);
 
@@ -111,7 +112,7 @@ export const BookCheckoutPage = () => {
 
   return (
     <div>
-      <div className='container  d-none d-lg-block'>
+      <div className='container d-none d-lg-block'>
         <div className='row mt-5'>
           <div className='col-sm-2 col-md-2'>
             { book?.img ?
