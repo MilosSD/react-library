@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { useOktaAuth } from "@okta/okta-react";
 import { SpinnerLoading } from "../Utils/SpinnerLoading";
-import { OktaAuth } from "@okta/okta-auth-js";
+
 export const Navbar = () => {
   const { oktaAuth, authState } = useOktaAuth();
 
@@ -40,13 +40,13 @@ export const Navbar = () => {
             </li>
           </ul>
           <ul className="navbar-nav ms-auto">
-            {!authState.isAuthenticated ? (
+            {!authState.isAuthenticated ? 
               <li className="nav-item m-1">
                 <Link type="button" className="btn btn-outline-light" to="/login">
                   Sign in
                 </Link>
               </li>
-            ) : (
+            : 
               <li>
                 <button
                   className="btn btn-outline-light"
@@ -55,7 +55,7 @@ export const Navbar = () => {
                   Logout
                 </button>
               </li>
-            )}
+            }
           </ul>
         </div>
       </div>
