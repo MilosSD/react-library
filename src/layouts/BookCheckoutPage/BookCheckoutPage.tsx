@@ -119,7 +119,7 @@ export const BookCheckoutPage = () => {
           }
         };
         const currentLoansCountResponse = await fetch(url, requestOptions);
-        if (currentLoansCountResponse.ok){
+        if (!currentLoansCountResponse.ok){
           throw new Error('something went wrong!')
         }
         const currentLoanscountResponseJson = await currentLoansCountResponse.json();
