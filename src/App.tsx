@@ -12,6 +12,7 @@ import { Security, LoginCallback } from "@okta/okta-react";
 import LoginWidget from "./Auth/loginWidget";
 
 const oktaAuth = new OktaAuth(oktaConfig);
+
 export const App = () => {
 
   const customAuthHandler = () =>{
