@@ -4,6 +4,7 @@ import MessageModel from "../../../models/MessageModel";
 import { SpinnerLoading } from "../../Utils/SpinnerLoading";
 import { Pagination } from "../../Utils/Pagination";
 import { AdminMessage } from "./AdminMessage";
+import AdminMessageRequest from "../../../models/AdminMessageRequest";
 
 export const AdminMessages = () => {
 
@@ -20,6 +21,9 @@ export const AdminMessages = () => {
     // Pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+
+    // Recall useEffect
+    const [buttonSubmit, setButtonSubmit] = useState(false);
 
     useEffect(() => {
         const fetchUserMessages = async () => {
@@ -49,7 +53,7 @@ export const AdminMessages = () => {
             setHttpError(error.message);
         } )
         window.scrollTo(0, 0);
-    }, [authState, currentPage]);
+    }, [authState, currentPage, buttonSubmit]);
 
     if (isLoadingMessages) {
         return(
@@ -64,6 +68,26 @@ export const AdminMessages = () => {
             </div>
         )
     }
+
+    async function submitResponseToQuestion(id: number, response: string) {
+        const url=`http://localhost:8080/api/message/secure/admin/message`;
+        if (authState && authState?.isAuthenticated && id!== null && response!==''){
+            const messageAdminRequestModel: AdminMessageRequest = new AdminMessageRequest(id, response);
+            const requestOptions = {
+                method: 'PUT',
+                headers: {
+                    Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(messageAdminRequestModel)
+            };
+            const messageAdminRequestModelResponse = await fetch (url, requestOptions);
+            if (!messageAdminRequestModelResponse.ok){
+                throw new Error('Something went wrong!');
+            }
+            setButtonSubmit(!buttonSubmit);
+        }
+    }
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
     return(
@@ -72,7 +96,7 @@ export const AdminMessages = () => {
                 <>
                     <h5>Pending Q/A: </h5>
                     {messages.map(message => (
-                        <AdminMessage message={message} key={message.id}/>
+                        <AdminMessage message={message} key={message.id} submitResponseToQuestion={submitResponseToQuestion}/>
                     ))}
                 </>
                 :
