@@ -55,10 +55,8 @@ export const ChangeQuantityOfBooks = () => {
       }, [currentPage]);
 
       const indexOfLastBook: number = currentPage * booksPerPage;
-  const indexOfFirstBook: number = indexOfLastBook - booksPerPage;
-  let lastItem =
-    booksPerPage * currentPage <= totalAmountofBooks
-      ? booksPerPage * currentPage
+      const indexOfFirstBook: number = indexOfLastBook - booksPerPage;
+      let lastItem = booksPerPage * currentPage <= totalAmountofBooks ? booksPerPage * currentPage
       : totalAmountofBooks;
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
