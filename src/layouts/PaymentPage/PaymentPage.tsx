@@ -1,8 +1,10 @@
 import { useOktaAuth } from "@okta/okta-react";
 import { useState, useEffect } from "react";
 import { SpinnerLoading } from "../Utils/SpinnerLoading";
-import { CardElement } from "@stripe/react-stripe-js";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { Link } from "react-router-dom";
+import PaymentInfoRequest from "../../models/PaymentInfoRequest";
+import { request } from "http";
 
 export const PaymentPage = () => {
 
@@ -35,6 +37,68 @@ export const PaymentPage = () => {
         })
     })
 
+    const elements = useElements();
+    const stripe = useStripe();
+
+    async function checkout() {
+        if (!stripe || !elements || !elements.getElement(CardElement)){
+            return;
+        }
+
+        setSubmitDisabled(true);
+
+        let paymentInfo = new PaymentInfoRequest(Math.round(fees * 100), 'USD', authState?.accessToken?.claims.sub);
+
+        const url = `https://localhost:8443/api/payment/secure/payment-intent`;
+        const requestOptions = {
+            methos: 'POST',
+            headers: {
+                Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(paymentInfo)
+        };
+        const stripeResponse = await fetch (url, requestOptions);
+        if (!stripeResponse.ok) {
+            setHttpError(true);
+            setSubmitDisabled(false);
+            throw new Error('Something went wrong!');
+        }
+        const stripeResponseJson = await stripeResponse.json();
+
+        stripe.confirmCardPayment(
+            stripeResponseJson.client_secret, {
+                payment_method: {
+                    card: elements.getElement(CardElement)!,
+                    billing_details: {
+                        email: authState?.accessToken?.claims.sub
+                    }
+                }
+            }, {handleActions: false}
+        ). then(async function(result:any){
+            if (result.error) {
+                setSubmitDisabled(false)
+                alert('There was an error')
+            } else {
+                const url = `htts://localhost:8443/api/payment/secure/payment-complete`;
+                const requestOption = {
+                    method: 'PUT',
+                    Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+                    'Content-Type' : 'application/json'
+                    };
+            const stripeResponse = await fetch (url, requestOptions);
+            if (!stripeResponse.ok) {
+                setHttpError(true);
+                setSubmitDisabled(false);
+                throw new Error('Something went wrong!');
+                }
+                setFees(0);
+                setSubmitDisabled(false);
+            }
+        });
+        setHttpError(false);
+    }
+
     if (loadingFees) {
         return (
             <SpinnerLoading/>
@@ -57,7 +121,8 @@ export const PaymentPage = () => {
                 <div className='card-body'>
                     <h5 className='card-title mb-3'>Credit Card</h5>
                     <CardElement id='card-element'/>
-                    <button disabled={submitDisabled} type='button' className='btn btn-md main-color text-white mt-3'>
+                    <button disabled={submitDisabled} type='button' className='btn btn-md main-color text-white mt-3'
+                        onClick={checkout}>
                         Pay fees
                     </button>
                 </div>
